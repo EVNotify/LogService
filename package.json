@@ -1,0 +1,27 @@
+{
+  "name": "logservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EVNotify/LogService.git"
+  },
+  "author": "GPlay97",
+  "license": "SEE LICENSE IN LICENSE.MD",
+  "bugs": {
+    "url": "https://github.com/EVNotify/LogService/issues"
+  },
+  "homepage": "https://github.com/EVNotify/LogService#readme",
+  "dependencies": {
+    "@evnotify/middlewares": "^1.0.5",
+    "@evnotify/utils": "^1.0.4",
+    "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.13"
+  }
+}

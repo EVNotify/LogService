@@ -1,0 +1,30 @@
+{
+    "AKEY_MISMATCH": {
+        "code": 403,
+        "message": "AKey does not match with given URL param"
+    },
+    "UNKNOWN_ROUTE": {
+        "code": 404,
+        "message": "Unknown route"
+    },
+    "UNPROCESSABLE_ENTITY": {
+        "code": 422,
+        "message": "Unprocessable entity"
+    },
+    "INTERNAL_ERROR": {
+        "code": 500,
+        "message": "Internal error"
+    },
+    "MISSING_AUTHORIZATION": {
+        "code": 400,
+        "message": "Missing authorization header. Ensure that API Key is provided as Bearer token within Authorization header"
+    },
+    "UNKNOWN_AUTHORIZATION": {
+        "code": 404,
+        "message": "Authorization key invalid or not found. Ensure to send a Bearer Token within Authorization header"
+    },
+    "AKEY_NOT_REGISTERED": {
+        "code": 404,
+        "message": "Provided AKey has not been registered"
+    }
+}
