@@ -2,14 +2,6 @@ const asyncHandler = require('@evnotify/utils').asyncHandler;
 const LogModel = require('../models/Log');
 const errors = require('../errors.json');
 
-
-const getLatestLog = (async (akey) => {
-    return LogModel.findOne({
-        akey,
-        status: 'running'
-    });
-});
-
 const submitToLatestLog = asyncHandler(async (req, res, next) => {
     // NOTE this route should not be accessible from outside?!
     const latestLog = await getLatestLog();
@@ -46,6 +38,38 @@ const submitToLatestLog = asyncHandler(async (req, res, next) => {
     res.sendStatus(200);
 });
 
+const getLogs = asyncHandler(async (req, res, next) => {
+    res.json(await LogModel.find({
+        akey: req.akey
+    }).sort('startDate'));
+});
+
+const getLogByID = asyncHandler(async (req, res, next) => {
+    const log = await LogModel.findById(req.params.id);
+
+    if (log == null) return next(errors.LOG_NOT_FOUND);
+
+    res.json(log);
+});
+
+const getLatestLog = asyncHandler(async (req, res, next) => {
+    res.json(await LogModel.findOne({
+        akey: req.akey,
+        status: 'finished'
+    }).sort('startDate'));  
+});
+
+const getCurrentLog = asyncHandler(async (req, res, next) => {
+    res.json(await LogModel.findOne({
+        akey: req.akey,
+        status: 'running'
+    })).sort('startDate');
+});
+
 module.exports = {
-    submitToLatestLog
+    submitToLatestLog,
+    getLogs,
+    getLogByID,
+    getLatestLog,
+    getCurrentLog
 };

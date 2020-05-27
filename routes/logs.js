@@ -3,7 +3,7 @@ const router = express.Router();
 
 const authenticationMiddleware = require('@evnotify/middlewares').authenticationHandler;
 const authorizationMiddleware = require('@evnotify/middlewares').authorizationHandler;
-const logController = require('../controllers/log');
+const logController = require('../controllers/logs');
 
 router.post('/latest', authorizationMiddleware, authenticationMiddleware, logController.submitToLatestLog);
 router.get('/', authorizationMiddleware, authenticationMiddleware, logController.getLogs);
