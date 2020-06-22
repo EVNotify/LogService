@@ -7,7 +7,7 @@ const logController = require('../controllers/logs');
 
 router.post('/latest', authorizationMiddleware, authenticationMiddleware, logController.submitToLatestLog);
 router.get('/', authorizationMiddleware, authenticationMiddleware, logController.getLogs);
-router.get('/:id', authorizationMiddleware, authenticationMiddleware, logController.getLogById);
+router.get('/:id', authorizationMiddleware, authenticationMiddleware, logController.getLogByID);
 router.get('/latest', authorizationMiddleware, authenticationMiddleware, logController.getLatestLog);
 router.get('/curent', authorizationMiddleware, authenticationMiddleware, logController.getCurrentLog);
 
