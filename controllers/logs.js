@@ -4,9 +4,12 @@ const errors = require('../errors.json');
 
 const submitToLatestLog = asyncHandler(async (req, res, next) => {
     // NOTE this route should not be accessible from outside?!
-    const latestLog = await getLatestLog();
+    const latestLog = await LogModel.findOne({
+        akey: req.headers.akey,
+        status: 'running'
+    }).sort('startDate');
     const baseData = {
-        akey: req.akey, // TODO add support within package middleware
+        akey: req.headers.akey,
         charge: req.body.charging,
         startDate: new Date(),
         startSOC: req.body.soc_display || req.body.soc_bms,
@@ -40,7 +43,7 @@ const submitToLatestLog = asyncHandler(async (req, res, next) => {
 
 const getLogs = asyncHandler(async (req, res, next) => {
     res.json(await LogModel.find({
-        akey: req.akey
+        akey: req.headers.akey
     }).sort('startDate'));
 });
 
@@ -54,14 +57,14 @@ const getLogByID = asyncHandler(async (req, res, next) => {
 
 const getLatestLog = asyncHandler(async (req, res, next) => {
     res.json(await LogModel.findOne({
-        akey: req.akey,
+        akey: req.headers.akey,
         status: 'finished'
     }).sort('startDate'));  
 });
 
 const getCurrentLog = asyncHandler(async (req, res, next) => {
     res.json(await LogModel.findOne({
-        akey: req.akey,
+        akey: req.headers.akey,
         status: 'running'
     })).sort('startDate');
 });

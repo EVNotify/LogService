@@ -14,8 +14,7 @@ const options = {
 const LogSchema = new mongoose.Schema({
     akey: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     status: {
         type: String,
