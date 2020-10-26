@@ -66,7 +66,7 @@ const getCurrentLog = asyncHandler(async (req, res, next) => {
     res.json(await LogModel.findOne({
         akey: req.headers.akey,
         status: 'running'
-    })).sort('startDate');
+    }).sort('startDate'));
 });
 
 module.exports = {
