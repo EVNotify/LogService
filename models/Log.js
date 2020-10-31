@@ -37,7 +37,7 @@ const LogSchema = new mongoose.Schema({
     },
     startSOC: {
         type: Number,
-        required: true,
+        required: false,
     },
     endSOC: {
         type: Number,

@@ -8,14 +8,15 @@ const submitToLatestLog = asyncHandler(async (req, res, next) => {
         akey: req.headers.akey,
         status: 'running'
     }).sort('startDate');
+    const telemetryObj = req.body.telemetry || {};
     const baseData = {
         akey: req.headers.akey,
-        charge: req.body.charging,
+        charge: telemetryObj.charging,
         startDate: new Date(),
-        startSOC: req.body.soc_display || req.body.soc_bms,
-        startODO: req.body.odo,
-        startCEC: req.body.cumulative_energy_charged,
-        startCED: req.body.cumulative_energy_discharged
+        startSOC: telemetryObj.soc_display || telemetryObj.soc_bms,
+        startODO: telemetryObj.odo,
+        startCEC: telemetryObj.cumulative_energy_charged,
+        startCED: telemetryObj.cumulative_energy_discharged
     };
 
     if (!latestLog) {
@@ -23,6 +24,8 @@ const submitToLatestLog = asyncHandler(async (req, res, next) => {
         baseData.history = [req.body];
         await LogModel.create(baseData);
     } else {
+        // if start soc not registered yet (due to location sync), register it once
+        if (!latestLog.startSOC && baseData.startSOC) latestLog.startSOC = baseData.startSOC;
         // check if charging state changed
         if (latestLog.charging != req.body.charging) {
             // changed, create new one, close the latest one
