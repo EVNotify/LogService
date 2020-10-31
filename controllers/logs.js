@@ -7,17 +7,19 @@ const submitToLatestLog = asyncHandler(async (req, res, next) => {
     const latestLog = await LogModel.findOne({
         akey: req.headers.akey,
         status: 'running'
-    }).sort('startDate');
+    }).sort('createdAt');
     const telemetryObj = req.body.telemetry || {};
     const baseData = {
         akey: req.headers.akey,
         charge: telemetryObj.charging,
-        startDate: new Date(),
         startSOC: telemetryObj.soc_display || telemetryObj.soc_bms,
         startODO: telemetryObj.odo,
         startCEC: telemetryObj.cumulative_energy_charged,
         startCED: telemetryObj.cumulative_energy_discharged
     };
+
+    delete req.body.akey;
+    req.body.createdAt = new Date();
 
     if (!latestLog) {
         // create new one
@@ -27,13 +29,12 @@ const submitToLatestLog = asyncHandler(async (req, res, next) => {
         // if start soc not registered yet (due to location sync), register it once
         if (!latestLog.startSOC && baseData.startSOC) latestLog.startSOC = baseData.startSOC;
         // check if charging state changed
-        if (latestLog.charging != req.body.charging) {
+        if (latestLog.charge != baseData.charge) {
             // changed, create new one, close the latest one
             latestLog.status = 'finished';
             await latestLog.save();
-            await LogModel.create({
-                history: [req.body]
-            });
+            baseData.history = [req.body];
+            await LogModel.create(baseData);
         } else {
             // didn't changed, push to existing one
             latestLog.history.push(req.body);
@@ -47,7 +48,7 @@ const submitToLatestLog = asyncHandler(async (req, res, next) => {
 const getLogs = asyncHandler(async (req, res, next) => {
     res.json(await LogModel.find({
         akey: req.headers.akey
-    }).sort('startDate'));
+    }).sort('createdAt'));
 });
 
 const getLogByID = asyncHandler(async (req, res, next) => {
@@ -62,14 +63,14 @@ const getLatestLog = asyncHandler(async (req, res, next) => {
     res.json(await LogModel.findOne({
         akey: req.headers.akey,
         status: 'finished'
-    }).sort('startDate') || {});  
+    }).sort('createdAt') || {});  
 });
 
 const getCurrentLog = asyncHandler(async (req, res, next) => {
     res.json(await LogModel.findOne({
         akey: req.headers.akey,
         status: 'running'
-    }).sort('startDate') || {});
+    }).sort('createdAt') || {});
 });
 
 module.exports = {

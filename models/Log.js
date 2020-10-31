@@ -27,10 +27,6 @@ const LogSchema = new mongoose.Schema({
         required: true,
         default: 0
     },
-    startDate: {
-        type: Date,
-        required: true
-    },
     endDate: {
         type: Date,
         required: false
