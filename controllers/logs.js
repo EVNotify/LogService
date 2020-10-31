@@ -11,7 +11,7 @@ const submitToLatestLog = asyncHandler(async (req, res, next) => {
     const telemetryObj = req.body.telemetry || {};
     const baseData = {
         akey: req.headers.akey,
-        charge: telemetryObj.charging,
+        charge: parseInt(telemetryObj.charging) || 0,
         startSOC: telemetryObj.soc_display || telemetryObj.soc_bms,
         startODO: telemetryObj.odo,
         startCEC: telemetryObj.cumulative_energy_charged,
